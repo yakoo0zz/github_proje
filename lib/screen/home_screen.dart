@@ -15,6 +15,8 @@ class HomeScreen extends StatelessWidget {
             children: [
               TextFormField(
                 controller: txtController,
+                decoration: InputDecoration(
+                    hintText: context.read<HomeCubit>().user?.name),
               ),
               TextButton.icon(
                 onPressed: () {
@@ -23,6 +25,10 @@ class HomeScreen extends StatelessWidget {
                 icon: Icon(Icons.search_outlined),
                 label: Text("Arama"),
               ),
+              Text(state is HomeSuccesful ? (state.userModel.name ?? "") : ""),
+              if (state is HomeLoading) CircularProgressIndicator(),
+              if (state is HomeSuccesful)
+                Text(state.userModel.followersUrl ?? "boş")
             ],
           );
         },
