@@ -13,14 +13,19 @@ class HomeScreen extends StatelessWidget {
         builder: (context, state) {
           return Column(
             children: [
+              SizedBox(height: 10),
               TextFormField(
                 controller: txtController,
                 decoration: InputDecoration(
+                    labelText: "Kullanıcı adını giriniz",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20)),
                     hintText: context.read<HomeCubit>().user?.name),
+                textAlign: TextAlign.start,
               ),
               TextButton.icon(
                 onPressed: () {
-                  context.read<HomeCubit>().fatchData(txtController.text);
+                  context.read<HomeCubit>().fetchFollowing(txtController.text);
                 },
                 icon: Icon(Icons.search_outlined),
                 label: Text("Arama"),
@@ -28,7 +33,16 @@ class HomeScreen extends StatelessWidget {
               Text(state is HomeSuccesful ? (state.userModel.name ?? "") : ""),
               if (state is HomeLoading) CircularProgressIndicator(),
               if (state is HomeSuccesful)
-                Text(state.userModel.followersUrl ?? "boş")
+                Text(state.userModel.followersUrl ?? "boş"),
+              if (state is FollwersLoaded)
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: state.followersModel.length,
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    itemBuilder: (context, index) =>
+                        Text(state.followersModel[index].login ?? ""),
+                  ),
+                )
             ],
           );
         },

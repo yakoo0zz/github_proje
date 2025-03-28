@@ -16,3 +16,9 @@ final class HomeSuccesful extends HomeState {
 
   const HomeSuccesful({required this.userModel});
 }
+
+final class FollwersLoaded extends HomeState {
+  final List<FollowersModel> followersModel;
+
+  FollwersLoaded({required this.followersModel});
+}

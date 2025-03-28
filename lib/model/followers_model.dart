@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'user_model.g.dart';
+part 'followers_model.g.dart';
 
 @JsonSerializable()
-class UserModel {
+class FollowersModel {
   String? login;
   int? id;
   String? nodeId;
@@ -23,22 +23,8 @@ class UserModel {
   String? type;
   String? userViewType;
   bool? siteAdmin;
-  String? name;
-  dynamic company;
-  String? blog;
-  dynamic location;
-  dynamic email;
-  dynamic hireable;
-  dynamic bio;
-  dynamic twitterUsername;
-  int? publicRepos;
-  int? publicGists;
-  int? followers;
-  int? following;
-  String? createdAt;
-  String? updatedAt;
 
-  UserModel(
+  FollowersModel(
       {this.login,
       this.id,
       this.nodeId,
@@ -57,23 +43,9 @@ class UserModel {
       this.receivedEventsUrl,
       this.type,
       this.userViewType,
-      this.siteAdmin,
-      this.name,
-      this.company,
-      this.blog,
-      this.location,
-      this.email,
-      this.hireable,
-      this.bio,
-      this.twitterUsername,
-      this.publicRepos,
-      this.publicGists,
-      this.followers,
-      this.following,
-      this.createdAt,
-      this.updatedAt});
+      this.siteAdmin});
 
-  factory UserModel.fromJson(Map<String, dynamic> json) =>
-      _$UserModelFromJson(json);
-  Map<String, dynamic> toJson() => _$UserModelToJson(this);
+  factory FollowersModel.fromJson(Map<String, dynamic> json) =>
+      _$FollowersModelFromJson(json);
+  Map<String, dynamic> toJson() => _$FollowersModelToJson(this);
 }
