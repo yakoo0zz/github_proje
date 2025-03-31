@@ -21,19 +21,35 @@ class HomeScreen extends StatelessWidget {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20)),
                     hintText: context.read<HomeCubit>().user?.name),
-                textAlign: TextAlign.start,
               ),
-              TextButton.icon(
-                onPressed: () {
-                  context.read<HomeCubit>().fetchFollowing(txtController.text);
-                },
-                icon: Icon(Icons.search_outlined),
-                label: Text("Arama"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton.icon(
+                    onPressed: () {
+                      context.read<HomeCubit>().fetchData(txtController.text);
+                    },
+                    icon: Icon(Icons.search_outlined),
+                    label: Text("Arama"),
+                  ),
+                  TextButton.icon(
+                    onPressed: () async {
+                      final username = txtController.text;
+                      await context.read<HomeCubit>().fetchData(username);
+                      if (!context.mounted) return;
+                      final userId =
+                          context.read<HomeCubit>().user?.id.toString() ?? "";
+                      if (userId.isNotEmpty) {
+                        await context.read<HomeCubit>().fetchPhoto(userId);
+                      }
+                    },
+                    icon: Icon(Icons.search_outlined),
+                    label: Text("Resim"),
+                  ),
+                ],
               ),
-              Text(state is HomeSuccesful ? (state.userModel.name ?? "") : ""),
+              if (state is HomeSuccesful) Text(state.userModel.name ?? ""),
               if (state is HomeLoading) CircularProgressIndicator(),
-              if (state is HomeSuccesful)
-                Text(state.userModel.followersUrl ?? "boş"),
               if (state is FollwersLoaded)
                 Expanded(
                   child: ListView.builder(
@@ -43,6 +59,17 @@ class HomeScreen extends StatelessWidget {
                         Text(state.followersModel[index].login ?? ""),
                   ),
                 )
+              else if (state is ReposLoaded)
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: state.reposModel.length,
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    itemBuilder: (context, index) =>
+                        Text(state.reposModel[index].name ?? ""),
+                  ),
+                ),
+              if (state is PhotoLoaded)
+                Image.memory(state.imageBytes, width: 200, height: 200),
             ],
           );
         },

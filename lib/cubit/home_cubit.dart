@@ -1,8 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:github_proje/model/followers_model.dart';
 import 'package:github_proje/model/user_model.dart';
+import 'package:github_proje/model/user_repos_model.dart';
 
 part 'home_state.dart';
 
@@ -11,8 +14,10 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit(this.dio) : super(HomeInitial());
   UserModel? user;
   List<FollowersModel>? userFollowers;
+  List<UserReposModel>? userRepos;
+  Uint8List? imageBytes;
 
-  Future<void> fatchData(String name) async {
+  Future<void> fetchData(String name) async {
     emit(HomeLoading());
     final response = await dio.get("https://api.github.com/users/$name");
     if (response.statusCode == 200) {
@@ -31,6 +36,30 @@ class HomeCubit extends Cubit<HomeState> {
           .map((follower) => FollowersModel.fromJson(follower))
           .toList();
       emit(FollwersLoaded(followersModel: userFollowers!));
+    }
+  }
+
+  Future<void> fetchRepos(String name) async {
+    emit(HomeLoading());
+    final response = await dio.get("https://api.github.com/users/$name/repos");
+    print(response.data);
+
+    if (response.statusCode == 200) {
+      userRepos = (response.data as List)
+          .map((repo) => UserReposModel.fromJson(repo))
+          .toList();
+      emit(ReposLoaded(reposModel: userRepos!));
+    }
+  }
+
+  Future<void> fetchPhoto(String id) async {
+    emit(HomeLoading());
+    final response = await dio.get(
+        ("https://avatars.githubusercontent.com/u/$id?v=4"),
+        options: Options(responseType: ResponseType.bytes));
+    if (response.statusCode == 200) {
+      imageBytes = response.data;
+      emit(PhotoLoaded(imageBytes: imageBytes!)); // Yeni state ile güncelle
     }
   }
 }

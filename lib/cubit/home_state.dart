@@ -22,3 +22,14 @@ final class FollwersLoaded extends HomeState {
 
   FollwersLoaded({required this.followersModel});
 }
+
+final class ReposLoaded extends HomeState {
+  final List<UserReposModel> reposModel;
+
+  ReposLoaded({required this.reposModel});
+}
+
+final class PhotoLoaded extends HomeState {
+  final Uint8List imageBytes;
+  const PhotoLoaded({required this.imageBytes});
+}
