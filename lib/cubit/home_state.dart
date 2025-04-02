@@ -35,3 +35,10 @@ final class PhotoLoaded extends HomeState {
   final Uint8List imageBytes;
   const PhotoLoaded({required this.imageBytes});
 }
+
+final class HomeError extends HomeState {
+  final String error;
+  final int? statusCode;
+
+  HomeError({required this.error, this.statusCode});
+}

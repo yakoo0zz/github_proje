@@ -67,6 +67,8 @@ class HomeScreen extends StatelessWidget {
                 // ),
                 if (state is HomeLoading)
                   CircularProgressIndicator()
+                else if (state is HomeError)
+                  Text(state.error)
                 else
                   Column(children: [
                     Text(homeCubit.user?.name ?? ""),
@@ -79,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (context, index) =>
                           Text(homeCubit.userRepos?[index].name ?? ""),
                     )
-                  ])
+                  ]),
 
                 // ! state kontrolleri
                 // if (state is HomeSuccesful) Text(state.userModel.name ?? ""),
