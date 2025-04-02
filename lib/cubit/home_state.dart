@@ -15,6 +15,8 @@ final class HomeSuccesful extends HomeState {
   final UserModel userModel;
 
   const HomeSuccesful({required this.userModel});
+  @override
+  List<Object> get props => [];
 }
 
 final class FollwersLoaded extends HomeState {

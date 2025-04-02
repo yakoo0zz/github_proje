@@ -21,7 +21,6 @@ class HomeCubit extends Cubit<HomeState> {
     emit(HomeLoading());
     final response = await dio.get("https://api.github.com/users/$name");
     if (response.statusCode == 200) {
-      print(response.data);
       user = UserModel.fromJson(response.data);
       emit(HomeSuccesful(userModel: user!));
     }
@@ -42,8 +41,6 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> fetchRepos(String name) async {
     emit(HomeLoading());
     final response = await dio.get("https://api.github.com/users/$name/repos");
-    print(response.data);
-
     if (response.statusCode == 200) {
       userRepos = (response.data as List)
           .map((repo) => UserReposModel.fromJson(repo))
@@ -61,5 +58,11 @@ class HomeCubit extends Cubit<HomeState> {
       imageBytes = response.data;
       emit(PhotoLoaded(imageBytes: imageBytes!)); // Yeni state ile güncelle
     }
+  }
+
+  Future<void> fetchAllData(String name) async {
+    await Future.wait(
+        [fetchData(name), fetchFollowing(name), fetchRepos(name)]);
+    await fetchPhoto(user?.id.toString() ?? "");
   }
 }
